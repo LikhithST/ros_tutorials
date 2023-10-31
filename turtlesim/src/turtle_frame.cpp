@@ -41,15 +41,22 @@
 namespace turtlesim
 {
 
+
+int res_w = 1920;
+int res_h = 1080; 
+int x_coor = 1;
+int y_coor = 1;
+double angle = 0;
+
 TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, Qt::WindowFlags f)
 : QFrame(parent, f)
-, path_image_(500, 500, QImage::Format_ARGB32)
+, path_image_(res_w, res_h, QImage::Format_ARGB32)
 , path_painter_(&path_image_)
 , frame_count_(0)
 , id_counter_(0)
 {
-  setFixedSize(500, 500);
-  setWindowTitle("TurtleSim");
+  setFixedSize(res_w, res_h);
+  setWindowTitle("KUKSA simulation");
 
   srand(time(NULL));
 
@@ -78,15 +85,15 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
   nh_->declare_parameter("background_b", rclcpp::ParameterValue(DEFAULT_BG_B), background_b_descriptor);
 
   QVector<QString> turtles;
-  turtles.append("ardent.png");
-  turtles.append("bouncy.png");
-  turtles.append("crystal.png");
-  turtles.append("dashing.png");
-  turtles.append("eloquent.png");
-  turtles.append("foxy.png");
-  turtles.append("galactic.png");
-  turtles.append("humble.png");
-  turtles.append("rolling.png");
+  turtles.append("car.png");
+  // turtles.append("bouncy.png");
+  // turtles.append("crystal.png");
+  // turtles.append("dashing.png");
+  // turtles.append("eloquent.png");
+  // turtles.append("foxy.png");
+  // turtles.append("galactic.png");
+  // turtles.append("humble.png");
+  // turtles.append("rolling.png");
 
   QString images_path = (ament_index_cpp::get_package_share_directory("turtlesim") + "/images/").c_str();
   for (int i = 0; i < turtles.size(); ++i)
@@ -113,7 +120,8 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
 
   width_in_meters_ = (width() - 1) / meter_;
   height_in_meters_ = (height() - 1) / meter_;
-  spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
+  spawnTurtle("", x_coor, y_coor, angle);
+  // spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
 
   // spawn all available turtle types
   if(false)
@@ -290,7 +298,8 @@ bool TurtleFrame::resetCallback(const std_srvs::srv::Empty::Request::SharedPtr, 
   RCLCPP_INFO(nh_->get_logger(), "Resetting turtlesim.");
   turtles_.clear();
   id_counter_ = 0;
-  spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
+  spawnTurtle("", 0, 0, 0);
+  // spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
   clear();
   return true;
 }

@@ -51,6 +51,11 @@
 namespace turtlesim
 {
 
+ extern int res_w;
+ extern int res_h;
+ extern int x_coor;
+ extern int y_coor;
+ extern double angle;
 class TurtleFrame : public QFrame
 {
   Q_OBJECT

@@ -31,6 +31,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <unistd.h>
+
 #include "turtlesim/turtle_frame.h"
 
 class TurtleApp : public QApplication
@@ -50,8 +52,46 @@ public:
     rclcpp::shutdown();
   }
 
-  int exec()
+  int exec(int& argc, char** argv)
   {
+    char ch;
+    while ((ch=getopt(argc, argv, "w:h:x:y:r:"))!=EOF)
+    {
+      /* code */
+      switch (ch)
+      {
+      case 'w':
+        /* code */
+        turtlesim::res_w = atoi(optarg);
+        break;
+
+      case 'h':
+        /* code */
+        turtlesim::res_h = atoi(optarg);
+        break;
+
+      case 'x':
+        /* code */
+        turtlesim::x_coor = atoi(optarg);
+        break;
+      
+      case 'y':
+        /* code */
+        turtlesim::y_coor = atoi(optarg);
+        break;
+      
+      case 'r':
+        /* code */
+        turtlesim::angle = atof(optarg);
+        break;
+      
+      default:
+        fprintf(stderr,"Unknown option %s",optarg);
+        break;
+      }
+    }
+    
+
     turtlesim::TurtleFrame frame(nh_);
     frame.show();
 
@@ -62,6 +102,6 @@ public:
 int main(int argc, char** argv)
 {
   TurtleApp app(argc, argv);
-  return app.exec();
+  return app.exec(argc, argv);
 }
 
